@@ -1,0 +1,10 @@
+  def runConfig(self):
+    DI24 = self.DI24.value()
+    DO24 = self.DO24.value()
+    DI72 = self.DI72.value()
+    DO72 = self.DO72.value()
+    DI110 = self.DI110.value()
+    DO110 = self.DO110.value()
+    AI = self.AI.value()
+    AO = self.AO.value()
+    config.configure(DI24,DO24,DI72,DO72,DI110,DO110,AI,AO)

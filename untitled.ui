@@ -85,7 +85,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QSpinBox" name="TFDOBox">
+     <widget class="QSpinBox" name="DI24">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -106,7 +106,7 @@
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QSpinBox" name="TFDIBox_2">
+     <widget class="QSpinBox" name="DO24">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -127,7 +127,7 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QSpinBox" name="spinBox">
+     <widget class="QSpinBox" name="DI72">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -148,7 +148,7 @@
      </widget>
     </item>
     <item row="7" column="1">
-     <widget class="QSpinBox" name="spinBox_2">
+     <widget class="QSpinBox" name="DO72">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -169,7 +169,7 @@
      </widget>
     </item>
     <item row="9" column="1">
-     <widget class="QSpinBox" name="spinBox_3">
+     <widget class="QSpinBox" name="DI110">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -190,7 +190,7 @@
      </widget>
     </item>
     <item row="11" column="1">
-     <widget class="QSpinBox" name="spinBox_4">
+     <widget class="QSpinBox" name="DO110">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -211,7 +211,7 @@
      </widget>
     </item>
     <item row="13" column="1">
-     <widget class="QSpinBox" name="spinBox_5">
+     <widget class="QSpinBox" name="AI">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -232,7 +232,7 @@
      </widget>
     </item>
     <item row="15" column="1">
-     <widget class="QSpinBox" name="spinBox_6">
+     <widget class="QSpinBox" name="AO">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
@@ -252,12 +252,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>428</x>
-     <y>404</y>
+     <x>320</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>287</x>
+     <y>188</y>
     </hint>
    </hints>
   </connection>
@@ -268,8 +268,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>496</x>
-     <y>410</y>
+     <x>320</x>
+     <y>450</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
