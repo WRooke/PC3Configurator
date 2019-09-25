@@ -86,7 +86,7 @@ print("Status: ", LpStatus[prob.status])
 
 numPCAs = 0
 for v in prob.variables():
-  if v.name != "__dummy":
+  if v.name != "__dummy" and v.varValue != 0:
     print(v.name, " = ", v.varValue)
     numPCAs += v.varValue
 
