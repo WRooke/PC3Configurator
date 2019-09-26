@@ -77,6 +77,7 @@ def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI
   # Store the output
   PCA_output = dict()
   numPCAs = 0
+  finalIO = dict()
 
   # Print solution status
   if LpStatus[prob.status] == "Optimal":
@@ -86,7 +87,6 @@ def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI
         # print(v.name, " = ", v.varValue)
         numPCAs += v.varValue
 
-    finalIO = dict()
     finalIO["24V DI"] = 0
     finalIO["24V DO"] = 0
 
@@ -118,7 +118,7 @@ def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI
     # input()
 
   else:
-    return False, PCA_output, numPCAs
+    return False, PCA_output, numPCAs, finalIO
     # print("Solution not found, missing PCA possible cause. Return to the idiot who made this to rectify")
     # input()
 

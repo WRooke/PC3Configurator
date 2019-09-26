@@ -223,7 +223,7 @@ class Ui_Dialog(object):
         for key in finalIO:
           labeltext += (key + ": " + str(finalIO[key]) + "\n")
       else:
-        labeltext += ("Optimal controller not found, please adjust parameters" + "</body></html>")
+        labeltext += ("Optimal controller not found, please adjust parameters")
       self.label_10.setText(labeltext)
 
     # Lists modules with selected communications protocols
