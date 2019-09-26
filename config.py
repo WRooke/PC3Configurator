@@ -7,15 +7,6 @@ def configure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI_n
     r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\williamr\OneDrive - OEM TECHNOLOGY SOLUTIONS PTY LTD\Systems\PC3Configurator\PC3Config.accdb;')
   cursor = conn.cursor()
 
-  # DI24_num = int(input("24V DI number: "))
-  # DO24_num = int(input("24V DO number: "))
-  # DI72_num = int(input("72V DI number: "))
-  # DO72_num = int(input("72V DO number: "))
-  # DI110_num = int(input("110V DI number: "))
-  # DO110_num = int(input("110V DO number: "))
-  # AI_num = int(input("AI number: "))
-  # AO_num = int(input("AO number: "))
-
   # Create list of PCAs
   PCAs = list()
 
@@ -33,7 +24,7 @@ def configure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI_n
   AO_dict = dict()
 
   # Get from database
-  cursor.execute("select * from PC3_PCA")
+  cursor.execute("select * from PC3_IO")
 
   # Populate lists and dictionaries
   for row in cursor.fetchall():
