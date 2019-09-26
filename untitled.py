@@ -212,7 +212,7 @@ class Ui_Dialog(object):
       DO110 = self.DO110.value()
       AI = self.AI.value()
       AO = self.AO.value()
-      SolFound, PCA_output, numPCAs = config.configure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
+      SolFound, PCA_output, numPCAs = config.IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
       labeltext = "<html><head/><body>"
       if SolFound is True:
         for key in PCA_output:
