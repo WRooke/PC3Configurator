@@ -1,10 +1,21 @@
-  def runConfig(self):
-    DI24 = self.DI24.value()
-    DO24 = self.DO24.value()
-    DI72 = self.DI72.value()
-    DO72 = self.DO72.value()
-    DI110 = self.DI110.value()
-    DO110 = self.DO110.value()
-    AI = self.AI.value()
-    AO = self.AO.value()
-    config.configure(DI24,DO24,DI72,DO72,DI110,DO110,AI,AO)
+def setupUi(self, Dialog):
+...... OTHER CODE HERE
+  self.pushButton.clicked.connect(self.runConfig)
+
+    def runConfig(self):
+      DI24 = self.DI24.value()
+      DO24 = self.DO24.value()
+      DI72 = self.DI72.value()
+      DO72 = self.DO72.value()
+      DI110 = self.DI110.value()
+      DO110 = self.DO110.value()
+      AI = self.AI.value()
+      AO = self.AO.value()
+      SolFound, PCA_output, numPCAs = config.configure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
+      if SolFound is True:
+        labeltext = "<html><head/><body>"
+        for key in PCA_output:
+          labeltext += ("<p>" + key + ": " + str(PCA_output[key]) + "</p>")
+        labeltext += ("<p> Total number of PCAs: " + str(numPCAs) + "</p>")
+        labeltext += "</body></html>"
+        self.label_10.setText(labeltext)

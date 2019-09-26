@@ -83,24 +83,27 @@ def configure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI_n
   # Solve it
   prob.solve()
 
+  # Store the output
+  PCA_output = dict()
+  numPCAs = 0
+
   # Print solution status
   if LpStatus[prob.status] == "Optimal":
-    print("Status: ", LpStatus[prob.status])
-
-    numPCAs = 0
+    # print("Status: ", LpStatus[prob.status])
     for v in prob.variables():
       if v.name != "__dummy" and v.varValue != 0:
-        print(v.name, " = ", v.varValue)
+        PCA_output[v.name] = v.varValue
+        # print(v.name, " = ", v.varValue)
         numPCAs += v.varValue
-
+    return True, PCA_output, numPCAs
     # print("Total number of I/Os = ", value(prob.objective))
-    print("Total number of PCAs = ", numPCAs)
-    input()
+    # print("Total number of PCAs = ", numPCAs)
+    # input()
 
   else:
-    print("Solution not found, missing PCA possible cause. Return to the idiot who made this to rectify")
-    input()
+    return False, PCA_output, numPCAs
+    # print("Solution not found, missing PCA possible cause. Return to the idiot who made this to rectify")
+    # input()
 
 if __name__ == '__main__':
-  # DI24, DO24, DI72, DO72, DI110, DO110, AI, AO = argv
   configure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
