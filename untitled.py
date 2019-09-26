@@ -203,6 +203,7 @@ class Ui_Dialog(object):
         self.pushButton.setText(_translate("Dialog", "Do the thing"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "I/Os"))
 
+    # Gets I/O numbers and runs configurator. Outputs to label
     def runConfig(self):
       DI24 = self.DI24.value()
       DO24 = self.DO24.value()
@@ -212,17 +213,20 @@ class Ui_Dialog(object):
       DO110 = self.DO110.value()
       AI = self.AI.value()
       AO = self.AO.value()
-      SolFound, PCA_output, numPCAs = config.IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
-      labeltext = "<html><head/><body>"
+      SolFound, PCA_output, numPCAs, finalIO = config.IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
+      labeltext = str()
       if SolFound is True:
         for key in PCA_output:
-          labeltext += ("<p>" + key + ": " + str(PCA_output[key]) + "</p>")
-        labeltext += ("<p> Total number of PCAs: " + str(numPCAs) + "</p>")
-        labeltext += "</body></html>"
+          labeltext += (key + ": " + str(PCA_output[key]) + "\n")
+        labeltext += ("Total number of PCAs: " + str(numPCAs) + "\n")
+        labeltext += "I/O breakdown of controller: \n"
+        for key in finalIO:
+          labeltext += (key + ": " + str(finalIO[key]) + "\n")
       else:
         labeltext += ("Optimal controller not found, please adjust parameters" + "</body></html>")
       self.label_10.setText(labeltext)
 
+    # Lists modules with selected communications protocols
     def listComms(self):
       text = self.comboBox.currentText()
       comms = config.getComms(text)

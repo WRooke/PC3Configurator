@@ -80,13 +80,39 @@ def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI
 
   # Print solution status
   if LpStatus[prob.status] == "Optimal":
-    # print("Status: ", LpStatus[prob.status])
     for v in prob.variables():
       if v.name != "__dummy" and v.varValue != 0:
-        PCA_output[v.name] = v.varValue
+        PCA_output[v.name[4:]] = v.varValue
         # print(v.name, " = ", v.varValue)
         numPCAs += v.varValue
-    return True, PCA_output, numPCAs
+
+    finalIO = dict()
+    finalIO["24V DI"] = 0
+    finalIO["24V DO"] = 0
+
+    finalIO["72V DI"] = 0
+    finalIO["72V DO"] = 0
+
+    finalIO["110V DI"] = 0
+    finalIO["110V DO"] = 0
+
+    finalIO["AI"] = 0
+    finalIO["AO"] = 0
+    for key in PCA_output:
+
+      finalIO["24V DI"] += DI24_dict[key] * PCA_output[key]
+      finalIO["24V DO"] += DO24_dict[key] * PCA_output[key]
+
+      finalIO["72V DI"] += DI72_dict[key] * PCA_output[key]
+      finalIO["72V DO"] += DO72_dict[key] * PCA_output[key]
+
+      finalIO["110V DI"] += DI110_dict[key] * PCA_output[key]
+      finalIO["110V DO"] += DO110_dict[key] * PCA_output[key]
+
+      finalIO["AI"] += AI_dict[key] * PCA_output[key]
+      finalIO["AO"] += AO_dict[key] * PCA_output[key]
+
+    return True, PCA_output, numPCAs, finalIO
     # print("Total number of I/Os = ", value(prob.objective))
     # print("Total number of PCAs = ", numPCAs)
     # input()
