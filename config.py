@@ -2,7 +2,7 @@ import pyodbc
 from pulp import *
 from sys import argv
 
-def configure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI_num, AO_num):
+def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI_num, AO_num):
   conn = pyodbc.connect(
     r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\williamr\OneDrive - OEM TECHNOLOGY SOLUTIONS PTY LTD\Systems\PC3Configurator\PC3Config.accdb;')
   cursor = conn.cursor()
@@ -96,5 +96,30 @@ def configure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI_n
     # print("Solution not found, missing PCA possible cause. Return to the idiot who made this to rectify")
     # input()
 
+def populateComms():
+  comms = list()
+  conn = pyodbc.connect(
+    r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\williamr\OneDrive - OEM TECHNOLOGY SOLUTIONS PTY LTD\Systems\PC3Configurator\PC3Config.accdb;')
+  cursor = conn.cursor()
+
+  for row in cursor.columns(table='PC3_COM'):
+    comms.append(row.column_name)
+
+  return comms[1:]
+
+def getComms(commType):
+  comms = list()
+
+  conn = pyodbc.connect(
+    r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\williamr\OneDrive - OEM TECHNOLOGY SOLUTIONS PTY LTD\Systems\PC3Configurator\PC3Config.accdb;')
+  cursor = conn.cursor()
+  searchString = "select PCA_Name from PC3_COM where " + commType + "=-1"
+  cursor.execute(searchString)
+
+  for row in cursor.fetchall():
+    comms.append(row.PCA_Name)
+  return comms
+
+
 if __name__ == '__main__':
-  configure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
+  IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)

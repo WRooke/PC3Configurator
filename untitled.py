@@ -25,14 +25,23 @@ class Ui_Dialog(object):
         font.setPointSize(12)
         self.label_11.setFont(font)
         self.label_11.setObjectName("label_11")
-        self.comboBox = QtWidgets.QComboBox(self.tab_2)
-        self.comboBox.setGeometry(QtCore.QRect(50, 70, 69, 22))
-        self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
+        self.comboBox = QtWidgets.QComboBox(self.tab_3)
+        self.comboBox.setGeometry(QtCore.QRect(20, 50, 69, 22))
+        self.comboBox.setObjectName("comboBox")
+        self.frame_2 = QtWidgets.QFrame(self.tab_3)
+        self.frame_2.setGeometry(QtCore.QRect(180, 50, 161, 271))
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame_2.setObjectName("frame_2")
+        self.label_12 = QtWidgets.QLabel(self.frame_2)
+        self.label_12.setGeometry(QtCore.QRect(10, 10, 141, 251))
+        self.label_12.setText("")
+        self.label_12.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label_12.setWordWrap(True)
+        self.label_12.setObjectName("label_12")
         self.tabWidget.addTab(self.tab_3, "")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
@@ -167,18 +176,19 @@ class Ui_Dialog(object):
         self.tabWidget.addTab(self.tab, "")
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+
         self.pushButton.clicked.connect(self.runConfig)
+        self.comboBox.activated.connect(self.listComms)
+        self.commDrop()
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.label_11.setText(_translate("Dialog", "Please specify model of Processor Module:"))
-        self.comboBox.setCurrentText(_translate("Dialog", "Dummy"))
-        self.comboBox.setItemText(0, _translate("Dialog", "Dummy"))
-        self.comboBox.setItemText(1, _translate("Dialog", "Dummy2"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Processor Module"))
+        self.comboBox.setCurrentText(_translate("Dialog", "Dummy"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Dialog", "Communications"))
         self.label.setText(_translate("Dialog", "24V DI"))
         self.label_3.setText(_translate("Dialog", "24V DO"))
@@ -212,6 +222,24 @@ class Ui_Dialog(object):
       else:
         labeltext += ("Optimal controller not found, please adjust parameters" + "</body></html>")
       self.label_10.setText(labeltext)
+
+    def listComms(self):
+      text = self.comboBox.currentText()
+      comms = config.getComms(text)
+      commstring = "Modules with selected communications protocol: \n"
+      for entry in comms:
+        commstring += (entry + "\n")
+      self.label_12.setText(commstring)
+
+
+    def commDrop(self):
+      _translate = QtCore.QCoreApplication.translate
+      commList = config.populateComms()
+      count = 0
+      for entry in commList:
+        self.comboBox.addItem("")
+        self.comboBox.setItemText(count, _translate("Dialog", entry))
+        count += 1
 
 if __name__ == "__main__":
     import sys
