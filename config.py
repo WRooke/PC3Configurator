@@ -1,6 +1,6 @@
 import pyodbc
 from pulp import *
-from sys import argv
+import string
 
 def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI_num, AO_num):
   conn = pyodbc.connect(
@@ -139,6 +139,8 @@ def getComms(commType):
   conn = pyodbc.connect(
     r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\williamr\OneDrive - OEM TECHNOLOGY SOLUTIONS PTY LTD\Systems\PC3Configurator\PC3Config.accdb;')
   cursor = conn.cursor()
+  if commType[0].isdigit():
+    commType = '"' + commType + '"'
   searchString = "select PCA_Name from PC3_COM where " + commType + "=-1"
   cursor.execute(searchString)
 

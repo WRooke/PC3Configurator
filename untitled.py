@@ -235,7 +235,7 @@ class Ui_Dialog(object):
         commstring += (entry + "\n")
       self.label_12.setText(commstring)
 
-
+    # Populates communication protocol drop down list
     def commDrop(self):
       _translate = QtCore.QCoreApplication.translate
       commList = config.populateComms()
