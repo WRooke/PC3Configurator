@@ -213,17 +213,7 @@ class Ui_Dialog(object):
       DO110 = self.DO110.value()
       AI = self.AI.value()
       AO = self.AO.value()
-      SolFound, PCA_output, numPCAs, finalIO = config.IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
-      labeltext = str()
-      if SolFound is True:
-        for key in PCA_output:
-          labeltext += (key + ": " + str(PCA_output[key]) + "\n")
-        labeltext += ("Total number of PCAs: " + str(numPCAs) + "\n")
-        labeltext += "I/O breakdown of controller: \n"
-        for key in finalIO:
-          labeltext += (key + ": " + str(finalIO[key]) + "\n")
-      else:
-        labeltext += ("Optimal controller not found, please adjust parameters")
+      labeltext = config.IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
       self.label_10.setText(labeltext)
 
     # Lists modules with selected communications protocols
@@ -244,6 +234,7 @@ class Ui_Dialog(object):
         self.comboBox.addItem("")
         self.comboBox.setItemText(count, _translate("Dialog", entry))
         count += 1
+      self.listComms()
 
 if __name__ == "__main__":
     import sys

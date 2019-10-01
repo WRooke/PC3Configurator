@@ -80,6 +80,7 @@ def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI
   finalIO = dict()
 
   # Print solution status
+  labeltext = str()
   if LpStatus[prob.status] == "Optimal":
     for v in prob.variables():
       if v.name != "__dummy" and v.varValue != 0:
@@ -112,13 +113,23 @@ def IOconfigure(DI24_num, DO24_num, DI72_num, DO72_num, DI110_num, DO110_num, AI
       finalIO["AI"] += AI_dict[key] * PCA_output[key]
       finalIO["AO"] += AO_dict[key] * PCA_output[key]
 
-    return True, PCA_output, numPCAs, finalIO
+
+    for key in PCA_output:
+      labeltext += (key + ": " + str(PCA_output[key]) + "\n")
+      labeltext += ("Total number of PCAs: " + str(numPCAs) + "\n")
+      labeltext += "I/O breakdown of controller: \n"
+    for key in finalIO:
+      labeltext += (key + ": " + str(finalIO[key]) + "\n")
+  else:
+    labeltext += ("Optimal controller not found, please adjust parameters")
+    # return True, PCA_output, numPCAs, finalIO
+  return labeltext
     # print("Total number of I/Os = ", value(prob.objective))
     # print("Total number of PCAs = ", numPCAs)
     # input()
 
-  else:
-    return False, PCA_output, numPCAs, finalIO
+  # else:
+  #   return False, PCA_output, numPCAs, finalIO
     # print("Solution not found, missing PCA possible cause. Return to the idiot who made this to rectify")
     # input()
 
@@ -139,8 +150,10 @@ def getComms(commType):
   conn = pyodbc.connect(
     r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\williamr\OneDrive - OEM TECHNOLOGY SOLUTIONS PTY LTD\Systems\PC3Configurator\PC3Config.accdb;')
   cursor = conn.cursor()
+  # If column has number as first digit, it must be wrapped in quotes else SQL will fail to search
   if commType[0].isdigit():
     commType = '"' + commType + '"'
+  # "=-1" because boolean true in SQL is -1
   searchString = "select PCA_Name from PC3_COM where " + commType + "=-1"
   cursor.execute(searchString)
 
