@@ -46,12 +46,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="5755" />
+          <entry key="py" value="5968" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="5755" />
+          <entry key="Python" value="5968" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -68,27 +68,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="142" column="35" selection-start-line="142" selection-start-column="35" selection-end-line="142" selection-end-column="35" />
+            <state relative-caret-position="381">
+              <caret line="125" column="18" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <marker date="1569968614471" expanded="true" signature="4193:4677" ph="..." />
+                <marker date="1569969601175" expanded="true" signature="4616:5243" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/untitled.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="361">
-              <caret line="230" column="40" lean-forward="true" selection-start-line="230" selection-start-column="40" selection-end-line="230" selection-end-column="40" />
+              <caret line="224" column="36" selection-start-line="224" selection-start-column="36" selection-end-line="224" selection-end-column="36" />
               <folding>
                 <element signature="e#198#240#0" expanded="true" />
-                <marker date="1569967825344" expanded="true" signature="11117:11124" ph="..." />
+                <marker date="1569969666108" expanded="true" signature="10632:10639" ph="..." />
               </folding>
             </state>
           </provider>
@@ -109,8 +109,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/untitled.py" />
         <option value="$PROJECT_DIR$/config.py" />
+        <option value="$PROJECT_DIR$/untitled.py" />
       </list>
     </option>
   </component>
@@ -232,14 +232,14 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4898606" weight="0.30551818" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4898606" visible="true" weight="0.28936744" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.48922688" visible="true" weight="0.30551818" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4898606" weight="0.28936744" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5101394" side_tool="true" visible="true" weight="0.28936744" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5107731" side_tool="true" visible="true" weight="0.30551818" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -254,7 +254,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/config.py</url>
-          <line>102</line>
+          <line>103</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -264,7 +264,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/config.py</url>
-          <line>136</line>
+          <line>147</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
@@ -291,24 +291,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/untitled.py">
+    <entry file="file://$PROJECT_DIR$/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="230" column="40" lean-forward="true" selection-start-line="230" selection-start-column="40" selection-end-line="230" selection-end-column="40" />
+        <state relative-caret-position="381">
+          <caret line="125" column="18" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
           <folding>
-            <element signature="e#198#240#0" expanded="true" />
-            <marker date="1569967825344" expanded="true" signature="11117:11124" ph="..." />
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1569969601175" expanded="true" signature="4616:5243" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.py">
+    <entry file="file://$PROJECT_DIR$/untitled.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="142" column="35" selection-start-line="142" selection-start-column="35" selection-end-line="142" selection-end-column="35" />
+        <state relative-caret-position="361">
+          <caret line="224" column="36" selection-start-line="224" selection-start-column="36" selection-end-line="224" selection-end-column="36" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <marker date="1569968614471" expanded="true" signature="4193:4677" ph="..." />
+            <element signature="e#198#240#0" expanded="true" />
+            <marker date="1569969666108" expanded="true" signature="10632:10639" ph="..." />
           </folding>
         </state>
       </provider>
