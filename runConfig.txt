@@ -2,7 +2,7 @@ def setupUi(self, Dialog):
 ...... OTHER CODE HERE
   self.pushButton.clicked.connect(self.runConfig)
 
-    def runConfig(self):
+        def runConfig(self):
       DI24 = self.DI24.value()
       DO24 = self.DO24.value()
       DI72 = self.DI72.value()
@@ -11,15 +11,7 @@ def setupUi(self, Dialog):
       DO110 = self.DO110.value()
       AI = self.AI.value()
       AO = self.AO.value()
-      SolFound, PCA_output, numPCAs = config.configure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
-      labeltext = "<html><head/><body>"
-      if SolFound is True:
-        for key in PCA_output:
-          labeltext += ("<p>" + key + ": " + str(PCA_output[key]) + "</p>")
-        labeltext += ("<p> Total number of PCAs: " + str(numPCAs) + "</p>")
-        labeltext += "</body></html>"
-      else:
-        labeltext += ("Optimal controller not found, please adjust parameters" + "</body></html>")
+      labeltext = config.IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
       self.label_10.setText(labeltext)
 
     def retranslateUi(self, Dialog):
@@ -30,3 +22,22 @@ def setupUi(self, Dialog):
           self.comboBox.addItem("")
           self.comboBox.setItemText(count, _translate("Dialog", entry))
           count += 1
+
+    def listComms(self):
+      text = self.comboBox.currentText()
+      comms = config.getComms(text)
+      commstring = "Modules with selected communications protocol: \n"
+      for entry in comms:
+        commstring += (entry + "\n")
+      self.label_12.setText(commstring)
+
+    # Populates communication protocol drop down list
+    def commDrop(self):
+      _translate = QtCore.QCoreApplication.translate
+      commList = config.populateComms()
+      count = 0
+      for entry in commList:
+        self.comboBox.addItem("")
+        self.comboBox.setItemText(count, _translate("Dialog", entry))
+        count += 1
+      self.listComms()
