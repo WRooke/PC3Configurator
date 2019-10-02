@@ -169,13 +169,14 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       finalIO["Isolated AI"] += ISOAI_dict[key] * PCA_output[key]
       finalIO["AO"] += AO_dict[key] * PCA_output[key]
 
-
+    labeltext += "PCA list: \n"
     for key in PCA_output:
       labeltext += (key + ": " + str(PCA_output[key]) + "\n")
-      labeltext += ("Total number of PCAs: " + str(numPCAs) + "\n")
-      labeltext += "I/O breakdown of controller: \n"
+    labeltext += ("Total number of PCAs: " + str(numPCAs) + "\n\n")
+    labeltext += "I/O breakdown of controller: \n"
     for key in finalIO:
-      labeltext += (key + ": " + str(finalIO[key]) + "\n")
+      if finalIO[key] != 0:
+        labeltext += (key + ": " + str(finalIO[key]) + "\n")
   else:
     labeltext += ("Optimal controller not found, please adjust parameters")
     # return True, PCA_output, numPCAs, finalIO
