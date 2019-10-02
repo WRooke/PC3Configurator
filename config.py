@@ -1,10 +1,14 @@
 import pyodbc
 from pulp import *
-import string
+import os
 
 def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num, DI110_num, ISODI110_num, DO110_num, AI_num, ISOAI_num, AO_num):
-  conn = pyodbc.connect(
-    r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\williamr\OneDrive - OEM TECHNOLOGY SOLUTIONS PTY LTD\Systems\PC3Configurator\PC3Config.accdb;')
+  cwd = os.getcwd()
+  dbdir = os.path.join(cwd, "PC3Config.accdb")
+  coindir = os.path.join(cwd, "cbc.exe")
+  dbconstring = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=' + dbdir + ';'
+  COIN_CMD(path=coindir)
+  conn = pyodbc.connect(dbconstring)
   cursor = conn.cursor()
 
   # Create list of PCAs
