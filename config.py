@@ -7,7 +7,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   dbdir = os.path.join(cwd, "PC3Config.accdb")
   coindir = os.path.join(cwd, "cbc.exe")
   dbconstring = 'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=' + dbdir + ';'
-  COIN_CMD(path=coindir)
+  solver = COIN_CMD(path=coindir)
   conn = pyodbc.connect(dbconstring)
   cursor = conn.cursor()
 
@@ -46,7 +46,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
     AO_dict[row.PCA_Name] = row.AO
 
-    if row.Isolated is True:
+    if row.DISO is True:
       DI24_dict[row.PCA_Name] = 0
       ISODI24_dict[row.PCA_Name] = row.DI_24V
 
@@ -72,7 +72,20 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       AI_dict[row.PCA_Name] = row.AI
       ISOAI_dict[row.PCA_Name] = 0
 
+  AIO_dict = dict()
+  AIO_types = list()
 
+  for row in cursor.columns(table='PC3_IO'):
+    if row.type_name == "BIT":
+      AIO_types.append(row.column_name)
+
+  for name in PCAs:
+    AIO_dict[name] = {}
+    for type in AIO_types:
+      cursor.execute("select " + type + " from PC3_IO")
+      row = cursor.fetchone()
+      print(row[0])
+      AIO_dict[name][type] = row[0]
   for row in cursor.fetchall():
     PCAs.append(row.PCA_Name)
 
@@ -82,6 +95,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
   # Dictionary to contain variables with type/category and limits
   PCA_vars = LpVariable.dicts("PCA", PCAs, 0, None, cat="Integer")
+  # AIO_types = LpVariable.dicts("AIO", PCAs, cat="Binary")
 
   # Objective function to minimise (total number of I/Os)
   prob += lpSum([DI24_dict[i] * PCA_vars[i] +\
@@ -123,7 +137,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   prob.writeLP("PC3_optim.lp")
 
   # Solve it
-  prob.solve()
+  prob.solve(solver)
 
   # Store the output
   PCA_output = dict()
