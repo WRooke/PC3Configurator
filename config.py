@@ -44,6 +44,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
     DO72_dict[row.PCA_Name] = row.DO_72V
 
     DO110_dict[row.PCA_Name] = row.DO_110V
+    AO_dict[row.PCA_Name] = row.AO
 
     if row.DISO is True:
       DI24_dict[row.PCA_Name] = 0
@@ -55,6 +56,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       DI110_dict[row.PCA_Name] = 0
       ISODI110_dict[row.PCA_Name] = row.DI_110V
 
+      AI_dict[row.PCA_Name] = 0
       ISOAI_dict[row.PCA_Name] = row.AI
 
     else:
@@ -100,7 +102,9 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
                 DO110_dict[i] * PCA_vars[i] + \
                 ISODI24_dict[i] * PCA_vars[i] + \
                 ISODI72_dict[i] * PCA_vars[i] + \
-                ISODI110_dict[i] * PCA_vars[i]
+                ISODI110_dict[i] * PCA_vars[i] + \
+                AI_dict[i] * PCA_vars[i] +\
+                AO_dict[i] * PCA_vars[i]
   for j in AIO_PCAs:
     objective += AI_dict[j] * AIO_var[j] +\
                  AO_dict[j] * AIO_var[j]

@@ -357,7 +357,11 @@ class Ui_Dialog(object):
 
         self.pushButton.clicked.connect(self.runConfig)
         self.comboBox.activated.connect(self.listComms)
+        self.AI.valueChanged.connect(self.enableCheckbox)
+        self.AO.valueChanged.connect(self.enableCheckbox)
         self.commDrop()
+
+
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -431,7 +435,6 @@ class Ui_Dialog(object):
       AIO_bool[self.Current.objectName()] = self.Current.isChecked()
       AIO_bool[self.NTC.objectName()] = self.NTC.isChecked()
       AIO_check = False
-
       if self.AI.value() == 0 and self.AO.value() == 0:
         AIO_check = True
       else:
@@ -463,6 +466,23 @@ class Ui_Dialog(object):
         self.comboBox.setItemText(count, _translate("Dialog", entry))
         count += 1
       self.listComms()
+
+    def enableCheckbox(self):
+      if self.AI.value() == 0 and self.AO.value == 0:
+        self.Uni10V.setEnabled(False)
+        self.Bi10V.setEnabled(False)
+        self.Uni36V.setEnabled(False)
+        self.Bi10V.setEnabled(False)
+        self.Current.setEnabled(False)
+        self.NTC.setEnabled(False)
+      else:
+        self.Uni10V.setEnabled(True)
+        self.Bi10V.setEnabled(True)
+        self.Uni36V.setEnabled(True)
+        self.Bi10V.setEnabled(True)
+        self.Current.setEnabled(True)
+        self.NTC.setEnabled(True)
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
