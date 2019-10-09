@@ -2,7 +2,7 @@ import pyodbc
 from pulp import *
 import os
 
-def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num, DI110_num, ISODI110_num, DO110_num, AI_num, ISOAI_num, AO_num):
+def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num, DI110_num, ISODI110_num, DO110_num, AI_num, ISOAI_num, AO_num, AIO_bool):
   cwd = os.getcwd()
   dbdir = os.path.join(cwd, "PC3Config.accdb")
   coindir = os.path.join(cwd, "cbc.exe")
@@ -13,6 +13,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
   # Create list of PCAs
   PCAs = list()
+  AIO_PCAs = list()
 
   # Create dictionaries of PCA names and numbers of I/O
   DI24_dict = dict()
@@ -44,8 +45,6 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
     DO110_dict[row.PCA_Name] = row.DO_110V
 
-    AO_dict[row.PCA_Name] = row.AO
-
     if row.DISO is True:
       DI24_dict[row.PCA_Name] = 0
       ISODI24_dict[row.PCA_Name] = row.DI_24V
@@ -56,7 +55,6 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       DI110_dict[row.PCA_Name] = 0
       ISODI110_dict[row.PCA_Name] = row.DI_110V
 
-      AI_dict[row.PCA_Name] = 0
       ISOAI_dict[row.PCA_Name] = row.AI
 
     else:
@@ -72,48 +70,42 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       AI_dict[row.PCA_Name] = row.AI
       ISOAI_dict[row.PCA_Name] = 0
 
-  AIO_dict = dict()
-  AIO_types = list()
+  AIO_search_string = "select * from PC3_IO where"
+  for key in AIO_bool:
+    if AIO_bool[key] is True:
+      AIO_search_string += " " + key + "=-1 AND"
+  AIO_search_string = AIO_search_string[:-4]
 
-  for row in cursor.columns(table='PC3_IO'):
-    if row.type_name == "BIT":
-      AIO_types.append(row.column_name)
-
-  for name in PCAs:
-    AIO_dict[name] = {}
-    for type in AIO_types:
-      cursor.execute("select " + type + " from PC3_IO")
-      row = cursor.fetchone()
-      print(row[0])
-      AIO_dict[name][type] = row[0]
+  cursor.execute(AIO_search_string)
   for row in cursor.fetchall():
-    PCAs.append(row.PCA_Name)
-
+    AIO_PCAs.append(row.PCA_Name)
+    AI_dict[row.PCA_Name] = row.AI
+    AO_dict[row.PCA_Name] = row.AO
 
   # Create minimisation problem
   prob = LpProblem("PC3", LpMinimize)
 
   # Dictionary to contain variables with type/category and limits
   PCA_vars = LpVariable.dicts("PCA", PCAs, 0, None, cat="Integer")
-  # AIO_types = LpVariable.dicts("AIO", PCAs, cat="Binary")
+  AIO_var = LpVariable.dicts("AIO", AIO_PCAs, 0, None, cat="Integer")
 
   # Objective function to minimise (total number of I/Os)
-  prob += lpSum([DI24_dict[i] * PCA_vars[i] +\
-                 DO24_dict[i] * PCA_vars[i] +\
+  objective = str()
+  for i in PCAs:
+    objective += DI24_dict[i] * PCA_vars[i] + \
+                DO24_dict[i] * PCA_vars[i] + \
+                DI72_dict[i] * PCA_vars[i] + \
+                DO72_dict[i] * PCA_vars[i] + \
+                DI110_dict[i] * PCA_vars[i] + \
+                DO110_dict[i] * PCA_vars[i] + \
+                ISODI24_dict[i] * PCA_vars[i] + \
+                ISODI72_dict[i] * PCA_vars[i] + \
+                ISODI110_dict[i] * PCA_vars[i]
+  for j in AIO_PCAs:
+    objective += AI_dict[j] * AIO_var[j] +\
+                 AO_dict[j] * AIO_var[j]
 
-                 DI72_dict[i] * PCA_vars[i] +\
-                 DO72_dict[i] * PCA_vars[i] +\
-
-                 DI110_dict[i] * PCA_vars[i] +\
-                 DO110_dict[i] * PCA_vars[i] +\
-
-                 AI_dict[i] * PCA_vars[i] +\
-                 AO_dict[i] * PCA_vars[i] +\
-
-                 ISODI24_dict[i] * PCA_vars[i] +\
-                 ISODI72_dict[i] * PCA_vars[i] +\
-                 ISODI110_dict[i] * PCA_vars[i] +\
-                 ISOAI_dict[i] * PCA_vars[i] for i in PCAs])
+  prob += objective
   # prob += lpSum([PCA_vars[i] for i in PCAs])
 
   # Constraints
@@ -129,9 +121,9 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   prob += lpSum([ISODI110_dict[i] * PCA_vars[i] for i in PCAs]) >= ISODI110_num
   prob += lpSum([DO110_dict[i] * PCA_vars[i] for i in PCAs]) >= DO110_num
 
-  prob += lpSum([AI_dict[i] * PCA_vars[i] for i in PCAs]) >= AI_num
-  prob += lpSum([ISOAI_dict[i] * PCA_vars[i] for i in PCAs]) >= ISOAI_num
-  prob += lpSum([AO_dict[i] * PCA_vars[i] for i in PCAs]) >= AO_num
+  prob += lpSum([AI_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= AI_num
+  prob += lpSum([ISOAI_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= ISOAI_num
+  prob += lpSum([AO_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= AO_num
 
   # Write to .lp file
   prob.writeLP("PC3_optim.lp")

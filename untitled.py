@@ -106,6 +106,24 @@ class Ui_Dialog(object):
         self.DI24_ISO.setFont(font)
         self.DI24_ISO.setObjectName("DI24_ISO")
         self.gridLayout.addWidget(self.DI24_ISO, 1, 1, 1, 1)
+        self.Uni10V = QtWidgets.QCheckBox(self.tab)
+        self.Uni10V.setGeometry(QtCore.QRect(30, 380, 70, 17))
+        self.Uni10V.setObjectName("Uni10V")
+        self.Bi10V = QtWidgets.QCheckBox(self.tab)
+        self.Bi10V.setGeometry(QtCore.QRect(30, 400, 70, 17))
+        self.Bi10V.setObjectName("Bi10V")
+        self.Uni36V = QtWidgets.QCheckBox(self.tab)
+        self.Uni36V.setGeometry(QtCore.QRect(30, 420, 70, 17))
+        self.Uni36V.setObjectName("Uni36V")
+        self.Bi36V = QtWidgets.QCheckBox(self.tab)
+        self.Bi36V.setGeometry(QtCore.QRect(30, 440, 70, 17))
+        self.Bi36V.setObjectName("Bi36V")
+        self.Current = QtWidgets.QCheckBox(self.tab)
+        self.Current.setGeometry(QtCore.QRect(30, 460, 70, 17))
+        self.Current.setObjectName("Current")
+        self.NTC = QtWidgets.QCheckBox(self.tab)
+        self.NTC.setGeometry(QtCore.QRect(30, 480, 70, 17))
+        self.NTC.setObjectName("NTC")
         self.widget1 = QtWidgets.QWidget(self.tab)
         self.widget1.setGeometry(QtCore.QRect(12, 291, 116, 43))
         self.widget1.setObjectName("widget1")
@@ -283,7 +301,7 @@ class Ui_Dialog(object):
         self.DO72.setObjectName("DO72")
         self.gridLayout_3.addWidget(self.DO72, 0, 1, 1, 1)
         self.widget7 = QtWidgets.QWidget(self.tab)
-        self.widget7.setGeometry(QtCore.QRect(12, 214, 116, 43))
+        self.widget7.setGeometry(QtCore.QRect(12, 214, 116, 52))
         self.widget7.setObjectName("widget7")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.widget7)
         self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -352,6 +370,12 @@ class Ui_Dialog(object):
         self.pushButton.setText(_translate("Dialog", "Do the thing"))
         self.DI24_IsoCheck.setText(_translate("Dialog", "Isolated"))
         self.label.setText(_translate("Dialog", "24V DI"))
+        self.Uni10V.setText(_translate("Dialog", "Uni10V"))
+        self.Bi10V.setText(_translate("Dialog", "Bi10V"))
+        self.Uni36V.setText(_translate("Dialog", "Uni36V"))
+        self.Bi36V.setText(_translate("Dialog", "Bi36V"))
+        self.Current.setText(_translate("Dialog", "Current"))
+        self.NTC.setText(_translate("Dialog", "NTC"))
         self.label_8.setText(_translate("Dialog", "AI"))
         self.AI_IsoCheck.setText(_translate("Dialog", "Isolated"))
         self.label_9.setText(_translate("Dialog", "AO"))
@@ -363,6 +387,7 @@ class Ui_Dialog(object):
         self.label_6.setText(_translate("Dialog", "110V DI"))
         self.DI110_IsoCheck.setText(_translate("Dialog", "Isolated"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "I/Os"))
+
         commList = config.populateComms()
         count = 0
         for entry in commList:
@@ -398,8 +423,27 @@ class Ui_Dialog(object):
       else:
         AIISO = 0
       AO = self.AO.value()
-      labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO)
-      self.label_10.setText(labeltext)
+      AIO_bool = dict()
+      AIO_bool[self.Uni10V.objectName()] = self.Uni10V.isChecked()
+      AIO_bool[self.Bi10V.objectName()] = self.Bi10V.isChecked()
+      AIO_bool[self.Uni36V.objectName()] = self.Uni36V.isChecked()
+      AIO_bool[self.Bi36V.objectName()] = self.Bi36V.isChecked()
+      AIO_bool[self.Current.objectName()] = self.Current.isChecked()
+      AIO_bool[self.NTC.objectName()] = self.NTC.isChecked()
+      AIO_check = False
+
+      if self.AI.value() == 0 and self.AO.value() == 0:
+        AIO_check = True
+      else:
+        for key in AIO_bool:
+          if AIO_bool[key] is True:
+            AIO_check = True
+
+      if AIO_check is True:
+        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO, AIO_bool)
+        self.label_10.setText(labeltext)
+      else:
+        self.label_10.setText("Please select at least one analog type")
 
     def listComms(self):
       text = self.comboBox.currentText()
@@ -419,7 +463,6 @@ class Ui_Dialog(object):
         self.comboBox.setItemText(count, _translate("Dialog", entry))
         count += 1
       self.listComms()
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
