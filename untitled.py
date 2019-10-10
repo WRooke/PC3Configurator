@@ -409,8 +409,9 @@ class Ui_Dialog(object):
       AI_bool, AO_bool = self.AIOCheckboxes()
       AI_check = False
       AO_check = False
-      if self.AI.value() == 0 and self.AO.value() == 0:
+      if self.AI.value() == 0:
         AI_check = True
+      if self.AO.value() == 0:
         AO_check = True
       if self.AI.value() != 0:
         for key in AI_bool:

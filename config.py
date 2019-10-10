@@ -59,7 +59,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       ISODI110_dict[row.PCA_Name] = row.DI_110V
 
       AI_dict[row.PCA_Name] = 0
-      ISOAI_dict[row.PCA_Name] = row.AI
+      # ISOAI_dict[row.PCA_Name] = row.AI
 
     else:
       DI24_dict[row.PCA_Name] = row.DI_24V
@@ -72,37 +72,37 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       ISODI110_dict[row.PCA_Name] = 0
 
       AI_dict[row.PCA_Name] = row.AI
-      ISOAI_dict[row.PCA_Name] = 0
+      # ISOAI_dict[row.PCA_Name] = 0
 
   AI_search_string = "select * from PC3_IO where"
   for key in AI_bool:
     if AI_bool[key] is True:
       AI_search_string += " " + key + "=-1 AND"
-  AI_search_string = AI_search_string[:-4]
-
-  cursor.execute(AI_search_string)
-  for row in cursor.fetchall():
-    AI_PCAs.append(row.PCA_Name)
-    AI_dict[row.PCA_Name] = row.AI
+  if AI_search_string != "select * from PC3_IO where":
+    AI_search_string = AI_search_string[:-4]
+    cursor.execute(AI_search_string)
+    for row in cursor.fetchall():
+      AI_PCAs.append(row.PCA_Name)
+      AI_dict[row.PCA_Name] = row.AI
 
   AO_search_string = "select * from PC3_IO where"
   for key in AO_bool:
     if AO_bool[key] is True:
       AO_search_string += " " + key + "=-1 AND"
-  AO_search_string = AO_search_string[:-4]
-
-  cursor.execute(AO_search_string)
-  for row in cursor.fetchall():
-    AO_PCAs.append(row.PCA_Name)
-    AO_dict[row.PCA_Name] = row.AO
+  if AO_search_string != "select * from PC3_IO where":
+    AO_search_string = AO_search_string[:-4]
+    cursor.execute(AO_search_string)
+    for row in cursor.fetchall():
+      AO_PCAs.append(row.PCA_Name)
+      AO_dict[row.PCA_Name] = row.AO
 
   # Create minimisation problem
   prob = LpProblem("PC3", LpMinimize)
 
   # Dictionary to contain variables with type/category and limits
   PCA_vars = LpVariable.dicts("PCA", PCAs, 0, None, cat="Integer")
-  AI_var = LpVariable.dicts("AI", AI_PCAs, 0, None, cat="Integer")
-  AO_var = LpVariable.dicts("AO", AO_PCAs, 0, None, cat="Integer")
+  AI_var = LpVariable.dicts("AI_", AI_PCAs, 0, None, cat="Integer")
+  AO_var = LpVariable.dicts("AO_", AO_PCAs, 0, None, cat="Integer")
 
   # Objective function to minimise (total number of I/Os)
   objective = str()
@@ -191,9 +191,15 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       finalIO["110V Isolated DI"] += ISODI110_dict[key] * PCA_output[key]
       finalIO["110V DO"] += DO110_dict[key] * PCA_output[key]
 
-      finalIO["AI"] += AI_dict[key] * PCA_output[key]
-      finalIO["Isolated AI"] += ISOAI_dict[key] * PCA_output[key]
-      finalIO["AO"] += AO_dict[key] * PCA_output[key]
+      try:
+       finalIO["AI"] += AI_dict[key] * PCA_output[key]
+      except KeyError:
+        finalIO["AI"] += 0
+      # finalIO["Isolated AI"] += ISOAI_dict[key] * PCA_output[key]
+      try:
+        finalIO["AO"] += AO_dict[key] * PCA_output[key]
+      except KeyError:
+        finalIO["AO"] += 0
 
     labeltext += "PCA list: \n"
     for key in PCA_output:
