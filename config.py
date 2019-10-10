@@ -2,7 +2,8 @@ import pyodbc
 from pulp import *
 import os
 
-def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num, DI110_num, ISODI110_num, DO110_num, AI_num, ISOAI_num, AO_num, AIO_bool):
+
+def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num, DI110_num, ISODI110_num, DO110_num, AI_num, ISOAI_num, AO_num, AI_bool, AO_bool):
   cwd = os.getcwd()
   dbdir = os.path.join(cwd, "PC3Config.accdb")
   coindir = os.path.join(cwd, "cbc.exe")
@@ -13,7 +14,8 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
   # Create list of PCAs
   PCAs = list()
-  AIO_PCAs = list()
+  AI_PCAs = list()
+  AO_PCAs = list()
 
   # Create dictionaries of PCA names and numbers of I/O
   DI24_dict = dict()
@@ -72,16 +74,26 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       AI_dict[row.PCA_Name] = row.AI
       ISOAI_dict[row.PCA_Name] = 0
 
-  AIO_search_string = "select * from PC3_IO where"
-  for key in AIO_bool:
-    if AIO_bool[key] is True:
-      AIO_search_string += " " + key + "=-1 AND"
-  AIO_search_string = AIO_search_string[:-4]
+  AI_search_string = "select * from PC3_IO where"
+  for key in AI_bool:
+    if AI_bool[key] is True:
+      AI_search_string += " " + key + "=-1 AND"
+  AI_search_string = AI_search_string[:-4]
 
-  cursor.execute(AIO_search_string)
+  cursor.execute(AI_search_string)
   for row in cursor.fetchall():
-    AIO_PCAs.append(row.PCA_Name)
+    AI_PCAs.append(row.PCA_Name)
     AI_dict[row.PCA_Name] = row.AI
+
+  AO_search_string = "select * from PC3_IO where"
+  for key in AO_bool:
+    if AO_bool[key] is True:
+      AO_search_string += " " + key + "=-1 AND"
+  AO_search_string = AO_search_string[:-4]
+
+  cursor.execute(AO_search_string)
+  for row in cursor.fetchall():
+    AO_PCAs.append(row.PCA_Name)
     AO_dict[row.PCA_Name] = row.AO
 
   # Create minimisation problem
@@ -89,7 +101,8 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
   # Dictionary to contain variables with type/category and limits
   PCA_vars = LpVariable.dicts("PCA", PCAs, 0, None, cat="Integer")
-  AIO_var = LpVariable.dicts("AIO", AIO_PCAs, 0, None, cat="Integer")
+  AI_var = LpVariable.dicts("AI", AI_PCAs, 0, None, cat="Integer")
+  AO_var = LpVariable.dicts("AO", AO_PCAs, 0, None, cat="Integer")
 
   # Objective function to minimise (total number of I/Os)
   objective = str()
@@ -102,12 +115,11 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
                 DO110_dict[i] * PCA_vars[i] + \
                 ISODI24_dict[i] * PCA_vars[i] + \
                 ISODI72_dict[i] * PCA_vars[i] + \
-                ISODI110_dict[i] * PCA_vars[i] + \
-                AI_dict[i] * PCA_vars[i] +\
-                AO_dict[i] * PCA_vars[i]
-  for j in AIO_PCAs:
-    objective += AI_dict[j] * AIO_var[j] +\
-                 AO_dict[j] * AIO_var[j]
+                ISODI110_dict[i] * PCA_vars[i]
+  for j in AI_PCAs:
+    objective += AI_dict[j] * AI_var[j]
+  for k in AO_PCAs:
+    objective += AO_dict[k] * AO_var[k]
 
   prob += objective
   # prob += lpSum([PCA_vars[i] for i in PCAs])
@@ -125,9 +137,9 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   prob += lpSum([ISODI110_dict[i] * PCA_vars[i] for i in PCAs]) >= ISODI110_num
   prob += lpSum([DO110_dict[i] * PCA_vars[i] for i in PCAs]) >= DO110_num
 
-  prob += lpSum([AI_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= AI_num
-  prob += lpSum([ISOAI_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= ISOAI_num
-  prob += lpSum([AO_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= AO_num
+  prob += lpSum([AI_dict[i] * AI_var[i] for i in AI_PCAs]) >= AI_num
+  # prob += lpSum([ISOAI_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= ISOAI_num
+  prob += lpSum([AO_dict[i] * AO_var[i] for i in AO_PCAs]) >= AO_num
 
   # Write to .lp file
   prob.writeLP("PC3_optim.lp")

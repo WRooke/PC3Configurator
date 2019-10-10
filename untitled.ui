@@ -254,89 +254,11 @@
       </item>
      </layout>
     </widget>
-    <widget class="QCheckBox" name="Uni10V">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>380</y>
-       <width>70</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Uni10V</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="Bi10V">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>400</y>
-       <width>70</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Bi10V</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="Uni36V">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>420</y>
-       <width>70</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Uni36V</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="Bi36V">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>440</y>
-       <width>70</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Bi36V</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="Current">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>460</y>
-       <width>70</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Current</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="NTC">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>480</y>
-       <width>70</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>NTC</string>
-     </property>
-    </widget>
     <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>12</x>
-       <y>291</y>
+       <x>15</x>
+       <y>290</y>
        <width>116</width>
        <height>43</height>
       </rect>
@@ -364,6 +286,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QSpinBox" name="AI">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="font">
          <font>
           <pointsize>10</pointsize>
@@ -418,8 +343,8 @@
     <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>12</x>
-       <y>339</y>
+       <x>15</x>
+       <y>480</y>
        <width>116</width>
        <height>24</height>
       </rect>
@@ -772,6 +697,86 @@
       </item>
      </layout>
     </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>335</y>
+       <width>62</width>
+       <height>134</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="AICheckboxes">
+      <item>
+       <widget class="QCheckBox" name="AIUni10V">
+        <property name="text">
+         <string>Uni10V</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="AIBi10V">
+        <property name="text">
+         <string>Bi10V</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="AIUni36V">
+        <property name="text">
+         <string>Uni36V</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="AIBi36V">
+        <property name="text">
+         <string>Bi36V</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="AICurrent">
+        <property name="text">
+         <string>Current</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="AINTC">
+        <property name="text">
+         <string>NTC</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>510</y>
+       <width>72</width>
+       <height>42</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="AOCheckboxes">
+      <item>
+       <widget class="QCheckBox" name="AOUni10V">
+        <property name="text">
+         <string>Uni10V</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="AOCurrent">
+        <property name="text">
+         <string>Current</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
   </widget>
  </widget>
@@ -838,6 +843,22 @@
     <hint type="destinationlabel">
      <x>108</x>
      <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>AIUni10V</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>AI</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>101</x>
+     <y>406</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>101</x>
+     <y>322</y>
     </hint>
    </hints>
   </connection>

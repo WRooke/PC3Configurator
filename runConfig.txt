@@ -1,27 +1,57 @@
 def setupUi(self, Dialog):
 ...... OTHER CODE HERE
-  self.pushButton.clicked.connect(self.runConfig)
+        self.pushButton.clicked.connect(self.runConfig)
+        self.comboBox.activated.connect(self.listComms)
+        self.commDrop()
 
-        def runConfig(self):
+    def runConfig(self):
       DI24 = self.DI24.value()
+      if self.DI24_IsoCheck.isChecked() is True:
+        ISODI24 = self.DI24_ISO.value()
+      else:
+        ISODI24 = 0
       DO24 = self.DO24.value()
-      DI72 = self.DI72.value()
-      DO72 = self.DO72.value()
-      DI110 = self.DI110.value()
-      DO110 = self.DO110.value()
-      AI = self.AI.value()
-      AO = self.AO.value()
-      labeltext = config.IOconfigure(DI24, DO24, DI72, DO72, DI110, DO110, AI, AO)
-      self.label_10.setText(labeltext)
 
-    def retranslateUi(self, Dialog):
-    ....... OTHER CODE HERE
-        commList = config.populateComms()
-        count = 0
-        for entry in commList:
-          self.comboBox.addItem("")
-          self.comboBox.setItemText(count, _translate("Dialog", entry))
-          count += 1
+      DI72 = self.DI72.value()
+      if self.DI72_IsoCheck.isChecked() is True:
+        ISODI72 = self.DI72_ISO.value()
+      else:
+        ISODI72 = 0
+      DO72 = self.DO72.value()
+
+      DI110 = self.DI110.value()
+      if self.DI110_IsoCheck.isChecked() is True:
+        ISODI110 = self.DI110_ISO.value()
+      else:
+        ISODI110 = 0
+      DO110 = self.DO110.value()
+
+      AI = self.AI.value()
+      if self.DI24_IsoCheck.isChecked() is True:
+        AIISO = self.AI_ISO.value()
+      else:
+        AIISO = 0
+      AO = self.AO.value()
+      AIO_bool = dict()
+      AIO_bool[self.Uni10V.objectName()] = self.Uni10V.isChecked()
+      AIO_bool[self.Bi10V.objectName()] = self.Bi10V.isChecked()
+      AIO_bool[self.Uni36V.objectName()] = self.Uni36V.isChecked()
+      AIO_bool[self.Bi36V.objectName()] = self.Bi36V.isChecked()
+      AIO_bool[self.Current.objectName()] = self.Current.isChecked()
+      AIO_bool[self.NTC.objectName()] = self.NTC.isChecked()
+      AIO_check = False
+      if self.AI.value() == 0 and self.AO.value() == 0:
+        AIO_check = True
+      else:
+        for key in AIO_bool:
+          if AIO_bool[key] is True:
+            AIO_check = True
+
+      if AIO_check is True:
+        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO, AIO_bool)
+        self.label_10.setText(labeltext)
+      else:
+        self.label_10.setText("Please select at least one analog type")
 
     def listComms(self):
       text = self.comboBox.currentText()
@@ -41,3 +71,12 @@ def setupUi(self, Dialog):
         self.comboBox.setItemText(count, _translate("Dialog", entry))
         count += 1
       self.listComms()
+
+    def retranslateUi(self, Dialog):
+    ....... OTHER CODE HERE
+        commList = config.populateComms()
+        count = 0
+        for entry in commList:
+          self.comboBox.addItem("")
+          self.comboBox.setItemText(count, _translate("Dialog", entry))
+          count += 1

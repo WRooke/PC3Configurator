@@ -106,26 +106,8 @@ class Ui_Dialog(object):
         self.DI24_ISO.setFont(font)
         self.DI24_ISO.setObjectName("DI24_ISO")
         self.gridLayout.addWidget(self.DI24_ISO, 1, 1, 1, 1)
-        self.Uni10V = QtWidgets.QCheckBox(self.tab)
-        self.Uni10V.setGeometry(QtCore.QRect(30, 380, 70, 17))
-        self.Uni10V.setObjectName("Uni10V")
-        self.Bi10V = QtWidgets.QCheckBox(self.tab)
-        self.Bi10V.setGeometry(QtCore.QRect(30, 400, 70, 17))
-        self.Bi10V.setObjectName("Bi10V")
-        self.Uni36V = QtWidgets.QCheckBox(self.tab)
-        self.Uni36V.setGeometry(QtCore.QRect(30, 420, 70, 17))
-        self.Uni36V.setObjectName("Uni36V")
-        self.Bi36V = QtWidgets.QCheckBox(self.tab)
-        self.Bi36V.setGeometry(QtCore.QRect(30, 440, 70, 17))
-        self.Bi36V.setObjectName("Bi36V")
-        self.Current = QtWidgets.QCheckBox(self.tab)
-        self.Current.setGeometry(QtCore.QRect(30, 460, 70, 17))
-        self.Current.setObjectName("Current")
-        self.NTC = QtWidgets.QCheckBox(self.tab)
-        self.NTC.setGeometry(QtCore.QRect(30, 480, 70, 17))
-        self.NTC.setObjectName("NTC")
         self.widget1 = QtWidgets.QWidget(self.tab)
-        self.widget1.setGeometry(QtCore.QRect(12, 291, 116, 43))
+        self.widget1.setGeometry(QtCore.QRect(15, 290, 116, 43))
         self.widget1.setObjectName("widget1")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.widget1)
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -165,7 +147,7 @@ class Ui_Dialog(object):
         self.AI_ISO.setObjectName("AI_ISO")
         self.gridLayout_7.addWidget(self.AI_ISO, 1, 1, 1, 1)
         self.widget2 = QtWidgets.QWidget(self.tab)
-        self.widget2.setGeometry(QtCore.QRect(12, 339, 116, 24))
+        self.widget2.setGeometry(QtCore.QRect(15, 480, 116, 24))
         self.widget2.setObjectName("widget2")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.widget2)
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -345,6 +327,42 @@ class Ui_Dialog(object):
         self.DI110_ISO.setFont(font)
         self.DI110_ISO.setObjectName("DI110_ISO")
         self.gridLayout_5.addWidget(self.DI110_ISO, 1, 1, 1, 1)
+        self.widget8 = QtWidgets.QWidget(self.tab)
+        self.widget8.setGeometry(QtCore.QRect(15, 335, 62, 134))
+        self.widget8.setObjectName("widget8")
+        self.AICheckboxes = QtWidgets.QVBoxLayout(self.widget8)
+        self.AICheckboxes.setContentsMargins(0, 0, 0, 0)
+        self.AICheckboxes.setObjectName("AICheckboxes")
+        self.AIUni10V = QtWidgets.QCheckBox(self.widget8)
+        self.AIUni10V.setObjectName("AIUni10V")
+        self.AICheckboxes.addWidget(self.AIUni10V)
+        self.AIBi10V = QtWidgets.QCheckBox(self.widget8)
+        self.AIBi10V.setObjectName("AIBi10V")
+        self.AICheckboxes.addWidget(self.AIBi10V)
+        self.AIUni36V = QtWidgets.QCheckBox(self.widget8)
+        self.AIUni36V.setObjectName("AIUni36V")
+        self.AICheckboxes.addWidget(self.AIUni36V)
+        self.AIBi36V = QtWidgets.QCheckBox(self.widget8)
+        self.AIBi36V.setObjectName("AIBi36V")
+        self.AICheckboxes.addWidget(self.AIBi36V)
+        self.AICurrent = QtWidgets.QCheckBox(self.widget8)
+        self.AICurrent.setObjectName("AICurrent")
+        self.AICheckboxes.addWidget(self.AICurrent)
+        self.AINTC = QtWidgets.QCheckBox(self.widget8)
+        self.AINTC.setObjectName("AINTC")
+        self.AICheckboxes.addWidget(self.AINTC)
+        self.widget9 = QtWidgets.QWidget(self.tab)
+        self.widget9.setGeometry(QtCore.QRect(20, 510, 72, 42))
+        self.widget9.setObjectName("widget9")
+        self.AOCheckboxes = QtWidgets.QVBoxLayout(self.widget9)
+        self.AOCheckboxes.setContentsMargins(0, 0, 0, 0)
+        self.AOCheckboxes.setObjectName("AOCheckboxes")
+        self.AOUni10V = QtWidgets.QCheckBox(self.widget9)
+        self.AOUni10V.setObjectName("AOUni10V")
+        self.AOCheckboxes.addWidget(self.AOUni10V)
+        self.AOCurrent = QtWidgets.QCheckBox(self.widget9)
+        self.AOCurrent.setObjectName("AOCurrent")
+        self.AOCheckboxes.addWidget(self.AOCurrent)
         self.tabWidget.addTab(self.tab, "")
 
         self.retranslateUi(Dialog)
@@ -357,47 +375,7 @@ class Ui_Dialog(object):
 
         self.pushButton.clicked.connect(self.runConfig)
         self.comboBox.activated.connect(self.listComms)
-        self.AI.valueChanged.connect(self.enableCheckbox)
-        self.AO.valueChanged.connect(self.enableCheckbox)
         self.commDrop()
-
-
-
-    def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label_11.setText(_translate("Dialog", "Please specify model of Processor Module:"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Processor Module"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Dialog", "Communications"))
-        self.label_10.setText(_translate("Dialog", "Run me"))
-        self.label_2.setText(_translate("Dialog", "Please specify number of:"))
-        self.pushButton.setText(_translate("Dialog", "Do the thing"))
-        self.DI24_IsoCheck.setText(_translate("Dialog", "Isolated"))
-        self.label.setText(_translate("Dialog", "24V DI"))
-        self.Uni10V.setText(_translate("Dialog", "Uni10V"))
-        self.Bi10V.setText(_translate("Dialog", "Bi10V"))
-        self.Uni36V.setText(_translate("Dialog", "Uni36V"))
-        self.Bi36V.setText(_translate("Dialog", "Bi36V"))
-        self.Current.setText(_translate("Dialog", "Current"))
-        self.NTC.setText(_translate("Dialog", "NTC"))
-        self.label_8.setText(_translate("Dialog", "AI"))
-        self.AI_IsoCheck.setText(_translate("Dialog", "Isolated"))
-        self.label_9.setText(_translate("Dialog", "AO"))
-        self.label_7.setText(_translate("Dialog", "110V DO"))
-        self.label_4.setText(_translate("Dialog", "72V DI"))
-        self.DI72_IsoCheck.setText(_translate("Dialog", "Isolated"))
-        self.label_3.setText(_translate("Dialog", "24V DO"))
-        self.label_5.setText(_translate("Dialog", "72V DO"))
-        self.label_6.setText(_translate("Dialog", "110V DI"))
-        self.DI110_IsoCheck.setText(_translate("Dialog", "Isolated"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "I/Os"))
-
-        commList = config.populateComms()
-        count = 0
-        for entry in commList:
-          self.comboBox.addItem("")
-          self.comboBox.setItemText(count, _translate("Dialog", entry))
-          count += 1
 
     def runConfig(self):
       DI24 = self.DI24.value()
@@ -427,26 +405,27 @@ class Ui_Dialog(object):
       else:
         AIISO = 0
       AO = self.AO.value()
-      AIO_bool = dict()
-      AIO_bool[self.Uni10V.objectName()] = self.Uni10V.isChecked()
-      AIO_bool[self.Bi10V.objectName()] = self.Bi10V.isChecked()
-      AIO_bool[self.Uni36V.objectName()] = self.Uni36V.isChecked()
-      AIO_bool[self.Bi36V.objectName()] = self.Bi36V.isChecked()
-      AIO_bool[self.Current.objectName()] = self.Current.isChecked()
-      AIO_bool[self.NTC.objectName()] = self.NTC.isChecked()
-      AIO_check = False
-      if self.AI.value() == 0 and self.AO.value() == 0:
-        AIO_check = True
-      else:
-        for key in AIO_bool:
-          if AIO_bool[key] is True:
-            AIO_check = True
 
-      if AIO_check is True:
-        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO, AIO_bool)
+      AI_bool, AO_bool = self.AIOCheckboxes()
+      AI_check = False
+      AO_check = False
+      if self.AI.value() == 0 and self.AO.value() == 0:
+        AI_check = True
+        AO_check = True
+      if self.AI.value() != 0:
+        for key in AI_bool:
+          if AI_bool[key] is True:
+            AI_check = True
+      if self.AO.value() != 0:
+        for key in AO_bool:
+          if AO_bool[key] is True:
+            AO_check = True
+
+      if AI_check == True and AO_check == True:
+        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO, AI_bool, AO_bool)
         self.label_10.setText(labeltext)
       else:
-        self.label_10.setText("Please select at least one analog type")
+        self.label_10.setText("Please select at least one analog type for both input and output")
 
     def listComms(self):
       text = self.comboBox.currentText()
@@ -467,21 +446,52 @@ class Ui_Dialog(object):
         count += 1
       self.listComms()
 
-    def enableCheckbox(self):
-      if self.AI.value() == 0 and self.AO.value == 0:
-        self.Uni10V.setEnabled(False)
-        self.Bi10V.setEnabled(False)
-        self.Uni36V.setEnabled(False)
-        self.Bi10V.setEnabled(False)
-        self.Current.setEnabled(False)
-        self.NTC.setEnabled(False)
-      else:
-        self.Uni10V.setEnabled(True)
-        self.Bi10V.setEnabled(True)
-        self.Uni36V.setEnabled(True)
-        self.Bi10V.setEnabled(True)
-        self.Current.setEnabled(True)
-        self.NTC.setEnabled(True)
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.label_11.setText(_translate("Dialog", "Please specify model of Processor Module:"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Processor Module"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Dialog", "Communications"))
+        self.label_10.setText(_translate("Dialog", "Run me"))
+        self.label_2.setText(_translate("Dialog", "Please specify number of:"))
+        self.pushButton.setText(_translate("Dialog", "Do the thing"))
+        self.DI24_IsoCheck.setText(_translate("Dialog", "Isolated"))
+        self.label.setText(_translate("Dialog", "24V DI"))
+        self.label_8.setText(_translate("Dialog", "AI"))
+        self.AI_IsoCheck.setText(_translate("Dialog", "Isolated"))
+        self.label_9.setText(_translate("Dialog", "AO"))
+        self.label_7.setText(_translate("Dialog", "110V DO"))
+        self.label_4.setText(_translate("Dialog", "72V DI"))
+        self.DI72_IsoCheck.setText(_translate("Dialog", "Isolated"))
+        self.label_3.setText(_translate("Dialog", "24V DO"))
+        self.label_5.setText(_translate("Dialog", "72V DO"))
+        self.label_6.setText(_translate("Dialog", "110V DI"))
+        self.DI110_IsoCheck.setText(_translate("Dialog", "Isolated"))
+        self.AIUni10V.setText(_translate("Dialog", "Uni10V"))
+        self.AIBi10V.setText(_translate("Dialog", "Bi10V"))
+        self.AIUni36V.setText(_translate("Dialog", "Uni36V"))
+        self.AIBi36V.setText(_translate("Dialog", "Bi36V"))
+        self.AICurrent.setText(_translate("Dialog", "Current"))
+        self.AINTC.setText(_translate("Dialog", "NTC"))
+        self.AOUni10V.setText(_translate("Dialog", "Uni10V"))
+        self.AOCurrent.setText(_translate("Dialog", "Current"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "I/Os"))
+
+        commList = config.populateComms()
+        count = 0
+        for entry in commList:
+          self.comboBox.addItem("")
+          self.comboBox.setItemText(count, _translate("Dialog", entry))
+          count += 1
+
+    def AIOCheckboxes(self):
+      AIBool = dict()
+      AOBool = dict()
+      for i in range(self.AICheckboxes.count()):
+        AIBool[self.AICheckboxes.itemAt(i).widget().objectName()] = self.AICheckboxes.itemAt(i).widget().isChecked()
+      for j in range(self.AOCheckboxes.count()):
+        AOBool[self.AOCheckboxes.itemAt(j).widget().objectName()] = self.AOCheckboxes.itemAt(j).widget().isChecked()
+      return AIBool, AOBool
 
 if __name__ == "__main__":
     import sys
