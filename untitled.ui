@@ -846,21 +846,5 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>AIUni10V</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>AI</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>101</x>
-     <y>406</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>101</x>
-     <y>322</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
 </ui>
