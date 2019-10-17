@@ -4,7 +4,7 @@ def setupUi(self, Dialog):
         self.comboBox.activated.connect(self.listComms)
         self.commDrop()
 
-    def runConfig(self):
+        def runConfig(self):
       DI24 = self.DI24.value()
       if self.DI24_IsoCheck.isChecked() is True:
         ISODI24 = self.DI24_ISO.value()
@@ -32,26 +32,28 @@ def setupUi(self, Dialog):
       else:
         AIISO = 0
       AO = self.AO.value()
-      AIO_bool = dict()
-      AIO_bool[self.Uni10V.objectName()] = self.Uni10V.isChecked()
-      AIO_bool[self.Bi10V.objectName()] = self.Bi10V.isChecked()
-      AIO_bool[self.Uni36V.objectName()] = self.Uni36V.isChecked()
-      AIO_bool[self.Bi36V.objectName()] = self.Bi36V.isChecked()
-      AIO_bool[self.Current.objectName()] = self.Current.isChecked()
-      AIO_bool[self.NTC.objectName()] = self.NTC.isChecked()
-      AIO_check = False
-      if self.AI.value() == 0 and self.AO.value() == 0:
-        AIO_check = True
-      else:
-        for key in AIO_bool:
-          if AIO_bool[key] is True:
-            AIO_check = True
 
-      if AIO_check is True:
-        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO, AIO_bool)
+      AI_bool, AO_bool = self.AIOCheckboxes()
+      AI_check = False
+      AO_check = False
+      if self.AI.value() == 0:
+        AI_check = True
+      if self.AO.value() == 0:
+        AO_check = True
+      if self.AI.value() != 0:
+        for key in AI_bool:
+          if AI_bool[key] is True:
+            AI_check = True
+      if self.AO.value() != 0:
+        for key in AO_bool:
+          if AO_bool[key] is True:
+            AO_check = True
+
+      if AI_check == True and AO_check == True:
+        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO, AI_bool, AO_bool)
         self.label_10.setText(labeltext)
       else:
-        self.label_10.setText("Please select at least one analog type")
+        self.label_10.setText("Please select at least one analog type for both input and output")
 
     def listComms(self):
       text = self.comboBox.currentText()
@@ -80,3 +82,12 @@ def setupUi(self, Dialog):
           self.comboBox.addItem("")
           self.comboBox.setItemText(count, _translate("Dialog", entry))
           count += 1
+          
+    def AIOCheckboxes(self):
+        AIBool = dict()
+        AOBool = dict()
+        for i in range(self.AICheckboxes.count()):
+            AIBool[self.AICheckboxes.itemAt(i).widget().objectName()] = self.AICheckboxes.itemAt(i).widget().isChecked()
+        for j in range(self.AOCheckboxes.count()):
+            AOBool[self.AOCheckboxes.itemAt(j).widget().objectName()] = self.AOCheckboxes.itemAt(j).widget().isChecked()
+        return AIBool, AOBool
