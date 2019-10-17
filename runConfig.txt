@@ -4,7 +4,7 @@ def setupUi(self, Dialog):
         self.comboBox.activated.connect(self.listComms)
         self.commDrop()
 
-        def runConfig(self):
+     def runConfig(self):
       DI24 = self.DI24.value()
       if self.DI24_IsoCheck.isChecked() is True:
         ISODI24 = self.DI24_ISO.value()
@@ -33,7 +33,7 @@ def setupUi(self, Dialog):
         AIISO = 0
       AO = self.AO.value()
 
-      AI_bool, AO_bool, DO_bool = self.IOCheckboxes()
+      AI_bool, AO_bool, DO24_bool = self.IOCheckboxes()
       AI_check = False
       AO_check = False
       if self.AI.value() == 0:
@@ -50,7 +50,8 @@ def setupUi(self, Dialog):
             AO_check = True
 
       if AI_check == True and AO_check == True:
-        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO, AI_bool, AO_bool)
+        labeltext = config.IOconfigure(DI24, ISODI24, DO24, DI72, ISODI72, DO72, DI110, ISODI110, DO110, AI, AIISO, AO,
+                                       AI_bool, AO_bool, DO24_bool)
         self.label_10.setText(labeltext)
       else:
         self.label_10.setText("Please select at least one analog type for both input and output")
@@ -74,15 +75,6 @@ def setupUi(self, Dialog):
         count += 1
       self.listComms()
 
-    def retranslateUi(self, Dialog):
-    ....... OTHER CODE HERE
-        commList = config.populateComms()
-        count = 0
-        for entry in commList:
-          self.comboBox.addItem("")
-          self.comboBox.setItemText(count, _translate("Dialog", entry))
-          count += 1
-
     def IOCheckboxes(self):
         AIBool = dict()
         AOBool = dict()
@@ -94,3 +86,12 @@ def setupUi(self, Dialog):
         for k in range(self.DO24Checkboxes.count()):
             DOBool[self.DO24Checkboxes.itemAt(k).widget().objectName()] = self.DO24Checkboxes.itemAt(k).widget().isChecked()
         return AIBool, AOBool, DOBool
+
+    def retranslateUi(self, Dialog):
+    ....... OTHER CODE HERE
+        commList = config.populateComms()
+        count = 0
+        for entry in commList:
+          self.comboBox.addItem("")
+          self.comboBox.setItemText(count, _translate("Dialog", entry))
+          count += 1

@@ -10,7 +10,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import config
 
-
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -376,15 +375,15 @@ class Ui_Dialog(object):
         self.DO24Layout.addLayout(self.gridLayout_2)
         self.DO24Checkboxes = QtWidgets.QFormLayout()
         self.DO24Checkboxes.setObjectName("DO24Checkboxes")
-        self.checkBox = QtWidgets.QCheckBox(self.widget2)
-        self.checkBox.setObjectName("checkBox")
-        self.DO24Checkboxes.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.checkBox)
-        self.checkBox_3 = QtWidgets.QCheckBox(self.widget2)
-        self.checkBox_3.setObjectName("checkBox_3")
-        self.DO24Checkboxes.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.checkBox_3)
-        self.checkBox_2 = QtWidgets.QCheckBox(self.widget2)
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.DO24Checkboxes.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.checkBox_2)
+        self.DO_A05 = QtWidgets.QCheckBox(self.widget2)
+        self.DO_A05.setObjectName("DO_A05")
+        self.DO24Checkboxes.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.DO_A05)
+        self.DO_A15 = QtWidgets.QCheckBox(self.widget2)
+        self.DO_A15.setObjectName("DO_A15")
+        self.DO24Checkboxes.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.DO_A15)
+        self.DO_A10 = QtWidgets.QCheckBox(self.widget2)
+        self.DO_A10.setObjectName("DO_A10")
+        self.DO24Checkboxes.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.DO_A10)
         self.DO24Layout.addLayout(self.DO24Checkboxes)
         self.tabWidget.addTab(self.tab, "")
 
@@ -430,10 +429,16 @@ class Ui_Dialog(object):
         self.AOUni10V.setText(_translate("Dialog", "Uni10V"))
         self.AOCurrent.setText(_translate("Dialog", "Current"))
         self.label_3.setText(_translate("Dialog", "24V DO"))
-        self.checkBox.setText(_translate("Dialog", "0.5A"))
-        self.checkBox_3.setText(_translate("Dialog", "1.5A"))
-        self.checkBox_2.setText(_translate("Dialog", "1.0A"))
+        self.DO_A05.setText(_translate("Dialog", "0.5A"))
+        self.DO_A15.setText(_translate("Dialog", "1.5A"))
+        self.DO_A10.setText(_translate("Dialog", "1.0A"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "I/Os"))
+        commList = config.populateComms()
+        count = 0
+        for entry in commList:
+          self.comboBox.addItem("")
+          self.comboBox.setItemText(count, _translate("Dialog", entry))
+          count += 1
 
     def runConfig(self):
       DI24 = self.DI24.value()
@@ -517,6 +522,7 @@ class Ui_Dialog(object):
         for k in range(self.DO24Checkboxes.count()):
             DOBool[self.DO24Checkboxes.itemAt(k).widget().objectName()] = self.DO24Checkboxes.itemAt(k).widget().isChecked()
         return AIBool, AOBool, DOBool
+
 
 if __name__ == "__main__":
     import sys
