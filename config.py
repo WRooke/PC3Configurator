@@ -3,7 +3,7 @@ from pulp import *
 import os
 
 
-def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num, DI110_num, ISODI110_num, DO110_num, AI_num, ISOAI_num, AO_num, AI_bool, AO_bool):
+def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num, DI110_num, ISODI110_num, DO110_num, AI_num, ISOAI_num, AO_num, AI_bool, AO_bool, DO24_bool):
   cwd = os.getcwd()
   dbdir = os.path.join(cwd, "PC3Config.accdb")
   coindir = os.path.join(cwd, "cbc.exe")
@@ -16,6 +16,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   PCAs = list()
   AI_PCAs = list()
   AO_PCAs = list()
+  DO24_PCAs = list()
 
   # Create dictionaries of PCA names and numbers of I/O
   DI24_dict = dict()
@@ -31,7 +32,6 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   DO110_dict = dict()
 
   AI_dict = dict()
-  ISOAI_dict = dict()
   AO_dict = dict()
 
   # Get non-isolated from database
@@ -47,6 +47,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
     DO110_dict[row.PCA_Name] = row.DO_110V
     AO_dict[row.PCA_Name] = row.AO
+    AI_dict[row.PCA_Name] = row.AI
 
     if row.DISO is True:
       DI24_dict[row.PCA_Name] = 0
@@ -58,8 +59,6 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       DI110_dict[row.PCA_Name] = 0
       ISODI110_dict[row.PCA_Name] = row.DI_110V
 
-      AI_dict[row.PCA_Name] = 0
-      # ISOAI_dict[row.PCA_Name] = row.AI
 
     else:
       DI24_dict[row.PCA_Name] = row.DI_24V
@@ -70,9 +69,6 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
       DI110_dict[row.PCA_Name] = row.DI_110V
       ISODI110_dict[row.PCA_Name] = 0
-
-      AI_dict[row.PCA_Name] = row.AI
-      # ISOAI_dict[row.PCA_Name] = 0
 
   AI_search_string = "select * from PC3_IO where"
   for key in AI_bool:
@@ -96,6 +92,18 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
       AO_PCAs.append(row.PCA_Name)
       AO_dict[row.PCA_Name] = row.AO
 
+  DO24_search_string = "select * from PC3_IO where"
+  for key in DO24_bool:
+    if AO_bool[key] is True:
+      DO24_search_string += " " + key + "=-1 AND"
+  if DO24_search_string != "select * from PC3_IO where":
+    DO24_search_string = AO_search_string[:-4]
+    cursor.execute(DO24_search_string)
+    for row in cursor.fetchall():
+      DO24_PCAs.append(row.PCA_Name)
+      DO24_dict[row.PCA_Name] = row.DO_24V
+
+
   # Create minimisation problem
   prob = LpProblem("PC3", LpMinimize)
 
@@ -103,23 +111,26 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   PCA_vars = LpVariable.dicts("PCA", PCAs, 0, None, cat="Integer")
   AI_var = LpVariable.dicts("AI_", AI_PCAs, 0, None, cat="Integer")
   AO_var = LpVariable.dicts("AO_", AO_PCAs, 0, None, cat="Integer")
+  DO24_var = LpVariable.dicts("DO24_", DO24_PCAs, 0, None, cat="Integer")
 
   # Objective function to minimise (total number of I/Os)
   objective = str()
   for i in PCAs:
     objective += DI24_dict[i] * PCA_vars[i] + \
-                DO24_dict[i] * PCA_vars[i] + \
                 DI72_dict[i] * PCA_vars[i] + \
                 DO72_dict[i] * PCA_vars[i] + \
                 DI110_dict[i] * PCA_vars[i] + \
                 DO110_dict[i] * PCA_vars[i] + \
                 ISODI24_dict[i] * PCA_vars[i] + \
                 ISODI72_dict[i] * PCA_vars[i] + \
-                ISODI110_dict[i] * PCA_vars[i]
+                ISODI110_dict[i] * PCA_vars[i]  # + \
+                # DO24_dict[i] * PCA_vars[i] + \
   for j in AI_PCAs:
     objective += AI_dict[j] * AI_var[j]
   for k in AO_PCAs:
     objective += AO_dict[k] * AO_var[k]
+  for l in DO24_PCAs:
+    objective += DO24_dict[l] * DO24_var[l]
 
   prob += objective
   # prob += lpSum([PCA_vars[i] for i in PCAs])
@@ -127,7 +138,8 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   # Constraints
   prob += lpSum([DI24_dict[i] * PCA_vars[i] for i in PCAs]) >= DI24_num
   prob += lpSum([ISODI24_dict[i] * PCA_vars[i] for i in PCAs]) >= ISODI24_num
-  prob += lpSum([DO24_dict[i] * PCA_vars[i] for i in PCAs]) >= DO24_num
+
+  prob += lpSum([DO24_dict[i] * DO24_var[i] for i in DO24_PCAs]) >= DO24_num
 
   prob += lpSum([DI72_dict[i] * PCA_vars[i] for i in PCAs]) >= DI72_num
   prob += lpSum([ISODI72_dict[i] * PCA_vars[i] for i in PCAs]) >= ISODI72_num
@@ -200,6 +212,10 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
         finalIO["AO"] += AO_dict[key] * PCA_output[key]
       except KeyError:
         finalIO["AO"] += 0
+      try:
+        finalIO["24V DO"] += DO24_dict[key] * PCA_output[key]
+      except KeyError:
+        finalIO["24V DO"] += 0
 
     labeltext += "PCA list: \n"
     for key in PCA_output:

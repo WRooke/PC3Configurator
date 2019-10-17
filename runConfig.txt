@@ -33,7 +33,7 @@ def setupUi(self, Dialog):
         AIISO = 0
       AO = self.AO.value()
 
-      AI_bool, AO_bool = self.AIOCheckboxes()
+      AI_bool, AO_bool, DO_bool = self.IOCheckboxes()
       AI_check = False
       AO_check = False
       if self.AI.value() == 0:
@@ -82,12 +82,15 @@ def setupUi(self, Dialog):
           self.comboBox.addItem("")
           self.comboBox.setItemText(count, _translate("Dialog", entry))
           count += 1
-          
-    def AIOCheckboxes(self):
+
+    def IOCheckboxes(self):
         AIBool = dict()
         AOBool = dict()
+        DOBool = dict()
         for i in range(self.AICheckboxes.count()):
             AIBool[self.AICheckboxes.itemAt(i).widget().objectName()] = self.AICheckboxes.itemAt(i).widget().isChecked()
         for j in range(self.AOCheckboxes.count()):
             AOBool[self.AOCheckboxes.itemAt(j).widget().objectName()] = self.AOCheckboxes.itemAt(j).widget().isChecked()
-        return AIBool, AOBool
+        for k in range(self.DO24Checkboxes.count()):
+            DOBool[self.DO24Checkboxes.itemAt(k).widget().objectName()] = self.DO24Checkboxes.itemAt(k).widget().isChecked()
+        return AIBool, AOBool, DOBool
