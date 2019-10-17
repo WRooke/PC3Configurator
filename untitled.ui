@@ -788,21 +788,21 @@
       <item>
        <layout class="QFormLayout" name="DO24Checkboxes">
         <item row="0" column="0">
-         <widget class="QCheckBox" name="A05">
+         <widget class="QCheckBox" name="DO_A05">
           <property name="text">
            <string>0.5A</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QCheckBox" name="A15">
+         <widget class="QCheckBox" name="DO_A15">
           <property name="text">
            <string>1.5A</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QCheckBox" name="A10">
+         <widget class="QCheckBox" name="DO_A10">
           <property name="text">
            <string>1.0A</string>
           </property>

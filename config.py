@@ -94,10 +94,10 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
   DO24_search_string = "select * from PC3_IO where"
   for key in DO24_bool:
-    if AO_bool[key] is True:
+    if DO24_bool[key] is True:
       DO24_search_string += " " + key + "=-1 AND"
   if DO24_search_string != "select * from PC3_IO where":
-    DO24_search_string = AO_search_string[:-4]
+    DO24_search_string = DO24_search_string[:-4]
     cursor.execute(DO24_search_string)
     for row in cursor.fetchall():
       DO24_PCAs.append(row.PCA_Name)
