@@ -193,7 +193,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
 
       finalIO["24V DI"] += DI24_dict[key] * PCA_output[key]
       finalIO["24V Isolated DI"] += ISODI24_dict[key] * PCA_output[key]
-      finalIO["24V DO"] += DO24_dict[key] * PCA_output[key]
+      # finalIO["24V DO"] += DO24_dict[key] * PCA_output[key]
 
       finalIO["72V DI"] += DI72_dict[key] * PCA_output[key]
       finalIO["72V Isolated DI"] += ISODI72_dict[key] * PCA_output[key]
