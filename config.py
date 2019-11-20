@@ -169,7 +169,13 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   if LpStatus[prob.status] == "Optimal":
     for v in prob.variables():
       if v.name != "__dummy" and v.varValue != 0:
-        PCA_output[v.name[4:]] = v.varValue
+        PCA_Name = v.name
+        while (PCA_Name[0:2] != "IO"):
+          PCA_Name=PCA_Name[1:]
+        # if PCA_Name in PCA_output:
+        #   pass
+        # else:
+        PCA_output[PCA_Name] = v.varValue
         # print(v.name, " = ", v.varValue)
         numPCAs += v.varValue
 
