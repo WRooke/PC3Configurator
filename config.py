@@ -34,6 +34,8 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   AI_dict = dict()
   AO_dict = dict()
 
+  Cost_dict = dict()
+
   # Get non-isolated from database
   cursor.execute("select * from PC3_IO")
 
@@ -41,6 +43,7 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   for row in cursor.fetchall():
     PCAs.append(row.PCA_Name)
 
+    Cost_dict[row.PCA_Name] = row.DummyCost
     DO24_dict[row.PCA_Name] = row.DO_24V
 
     DO72_dict[row.PCA_Name] = row.DO_72V
@@ -116,28 +119,32 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   # Objective function to minimise (total number of I/Os)
   objective = str()
   for i in PCAs:
-    objective += DI24_dict[i] * PCA_vars[i] + \
-                DI72_dict[i] * PCA_vars[i] + \
-                DO72_dict[i] * PCA_vars[i] + \
-                DI110_dict[i] * PCA_vars[i] + \
-                DO110_dict[i] * PCA_vars[i] + \
-                ISODI24_dict[i] * PCA_vars[i] + \
-                ISODI72_dict[i] * PCA_vars[i] + \
-                ISODI110_dict[i] * PCA_vars[i]  # + \
-                # DO24_dict[i] * PCA_vars[i] + \
+    # objective += DI24_dict[i] * PCA_vars[i] + \
+    #             DI72_dict[i] * PCA_vars[i] + \
+    #             DO72_dict[i] * PCA_vars[i] + \
+    #             DI110_dict[i] * PCA_vars[i] + \
+    #             DO110_dict[i] * PCA_vars[i] + \
+    #             ISODI24_dict[i] * PCA_vars[i] + \
+    #             ISODI72_dict[i] * PCA_vars[i] + \
+    #             ISODI110_dict[i] * PCA_vars[i]  # + \
+    #             # DO24_dict[i] * PCA_vars[i] + \
+    objective += Cost_dict[i] * PCA_vars[i]
   for j in AI_PCAs:
-    objective += AI_dict[j] * AI_var[j]
+    # objective += AI_dict[j] * AI_var[j]
+    objective += Cost_dict[j] * AI_var[j]
   for k in AO_PCAs:
-    objective += AO_dict[k] * AO_var[k]
+    # objective += AO_dict[k] * AO_var[k]
+    objective += Cost_dict[k] * AO_var[k]
   for l in DO24_PCAs:
-    objective += DO24_dict[l] * DO24_var[l]
-
+    # objective += DO24_dict[l] * DO24_var[l]
+    objective += Cost_dict[l] * DO24_var[l]
   prob += objective
   # prob += lpSum([PCA_vars[i] for i in PCAs])
 
   # Constraints
   prob += lpSum([DI24_dict[i] * PCA_vars[i] for i in PCAs]) >= DI24_num
   prob += lpSum([ISODI24_dict[i] * PCA_vars[i] for i in PCAs]) >= ISODI24_num
+  prob += lpSum([DO24_dict[i] * PCA_vars[i] for i in PCAs]) >= DO24_num
 
   prob += lpSum([DO24_dict[i] * DO24_var[i] for i in DO24_PCAs]) >= DO24_num
 
@@ -152,6 +159,10 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
   prob += lpSum([AI_dict[i] * AI_var[i] for i in AI_PCAs]) >= AI_num
   # prob += lpSum([ISOAI_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= ISOAI_num
   prob += lpSum([AO_dict[i] * AO_var[i] for i in AO_PCAs]) >= AO_num
+
+  prob += lpSum([AI_dict[i] * PCA_vars[i] for i in PCAs]) >= AI_num
+  # prob += lpSum([ISOAI_dict[i] * AIO_var[i] for i in AIO_PCAs]) >= ISOAI_num
+  prob += lpSum([AO_dict[i] * PCA_vars[i] for i in PCAs]) >= AO_num
 
   # Write to .lp file
   prob.writeLP("PC3_optim.lp")
@@ -172,12 +183,11 @@ def IOconfigure(DI24_num, ISODI24_num, DO24_num, DI72_num, ISODI72_num, DO72_num
         PCA_Name = v.name
         while (PCA_Name[0:2] != "IO"):
           PCA_Name=PCA_Name[1:]
-        # if PCA_Name in PCA_output:
-        #   pass
-        # else:
-        PCA_output[PCA_Name] = v.varValue
-        # print(v.name, " = ", v.varValue)
-        numPCAs += v.varValue
+        if PCA_Name in PCA_output:
+          pass
+        else:
+          PCA_output[PCA_Name] = v.varValue
+          numPCAs += v.varValue
 
     finalIO["24V DI"] = 0
     finalIO["24V Isolated DI"] = 0
